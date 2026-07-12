@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Question } from "@/lib/types";
+import { questionIcons } from "@/lib/question-icons";
 
 interface QuestionCardProps {
   question: Question;
@@ -10,6 +11,25 @@ interface QuestionCardProps {
   onChange: (value: string) => void;
   index: number;
 }
+
+const iconColors = [
+  "from-green-400 to-emerald-500",
+  "from-cyan-400 to-blue-500",
+  "from-rose-400 to-pink-500",
+  "from-amber-400 to-orange-500",
+  "from-emerald-400 to-teal-500",
+  "from-violet-400 to-purple-500",
+  "from-indigo-400 to-blue-500",
+  "from-pink-400 to-rose-500",
+  "from-yellow-400 to-amber-500",
+  "from-red-400 to-rose-500",
+  "from-teal-400 to-cyan-500",
+  "from-cyan-400 to-sky-500",
+  "from-lime-400 to-green-500",
+  "from-purple-400 to-violet-500",
+  "from-orange-400 to-red-500",
+  "from-fuchsia-400 to-pink-500",
+];
 
 export function QuestionCard({ question, value, onChange, index }: QuestionCardProps) {
   const [customText, setCustomText] = useState("");
@@ -34,144 +54,158 @@ export function QuestionCard({ question, value, onChange, index }: QuestionCardP
     switch (question.type) {
       case "text":
         return (
-          <input
-            type="text"
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={question.placeholder || "Type your answer..."}
-            className="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 backdrop-blur-sm focus:outline-none focus:border-green-400/50 focus:ring-1 focus:ring-green-400/30 transition-all duration-200"
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+          >
+            <input
+              type="text"
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              placeholder={question.placeholder || "Type your answer..."}
+              className="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/25 backdrop-blur-sm focus:outline-none focus:border-green-400/50 focus:ring-2 focus:ring-green-400/20 transition-all duration-300 text-lg"
+            />
+          </motion.div>
         );
 
       case "textarea":
         return (
-          <textarea
-            value={value}
-            onChange={(e) => onChange(e.target.value)}
-            placeholder={question.placeholder || "Share your thoughts..."}
-            rows={4}
-            className="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-white/10 text-white placeholder-white/30 backdrop-blur-sm focus:outline-none focus:border-green-400/50 focus:ring-1 focus:ring-green-400/30 transition-all duration-200 resize-none"
-          />
+          <motion.div
+            initial={{ opacity: 0, y: 10 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.15 }}
+          >
+            <textarea
+              value={value}
+              onChange={(e) => onChange(e.target.value)}
+              placeholder={question.placeholder || "Share your thoughts..."}
+              rows={4}
+              className="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/25 backdrop-blur-sm focus:outline-none focus:border-green-400/50 focus:ring-2 focus:ring-green-400/20 transition-all duration-300 resize-none text-lg"
+            />
+          </motion.div>
         );
 
       case "radio":
-        return (
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-            {question.options?.map((option, i) => (
-              <motion.button
-                key={option}
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.05 }}
-                onClick={() => handleOptionSelect(option)}
-                className={`group relative p-4 rounded-xl border text-left transition-all duration-200 ${
-                  value === option
-                    ? "border-green-400 bg-green-500/10 text-white shadow-lg shadow-green-500/10"
-                    : "border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:bg-white/10"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                      value === option
-                        ? "border-green-400 bg-green-400"
-                        : "border-white/30 group-hover:border-white/50"
-                    }`}
-                  >
-                    {value === option && (
-                      <div className="w-2 h-2 rounded-full bg-white" />
-                    )}
-                  </div>
-                  <span className="text-sm md:text-base font-medium">{option}</span>
-                </div>
-              </motion.button>
-            ))}
-          </div>
-        );
+      case "radio-text": {
+        const showOther = question.type === "radio-text";
+        const allOptions = showOther
+          ? [...(question.options || []), "Other (please specify)"]
+          : question.options || [];
 
-      case "radio-text":
         return (
-          <div className="space-y-3">
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-              {question.options?.map((option, i) => (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.1 }}
+            className="grid grid-cols-1 md:grid-cols-2 gap-3"
+          >
+            {allOptions.map((option, i) => {
+              const isSelected =
+                option === "Other (please specify)"
+                  ? showCustom
+                  : value === option && !showCustom;
+
+              return (
                 <motion.button
                   key={option}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: i * 0.05 }}
+                  transition={{
+                    delay: 0.08 + i * 0.04,
+                    type: "spring",
+                    stiffness: 200,
+                    damping: 20,
+                  }}
+                  whileHover={{
+                    scale: 1.02,
+                    borderColor: "rgba(74, 222, 128, 0.4)",
+                    transition: { duration: 0.2 },
+                  }}
+                  whileTap={{ scale: 0.97 }}
                   onClick={() => handleOptionSelect(option)}
-                  className={`group relative p-4 rounded-xl border text-left transition-all duration-200 ${
-                    value === option && !showCustom
-                      ? "border-green-400 bg-green-500/10 text-white shadow-lg shadow-green-500/10"
-                      : "border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:bg-white/10"
+                  className={`group relative p-4 rounded-2xl border-2 text-left transition-all duration-300 overflow-hidden ${
+                    isSelected
+                      ? "border-green-400 bg-green-500/15 text-white shadow-lg shadow-green-500/20"
+                      : "border-white/[0.08] bg-white/[0.04] text-white/70 hover:bg-white/[0.08]"
                   }`}
                 >
-                  <div className="flex items-center gap-3">
-                    <div
-                      className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                        value === option && !showCustom
-                          ? "border-green-400 bg-green-400"
-                          : "border-white/30 group-hover:border-white/50"
-                      }`}
-                    >
-                      {value === option && !showCustom && (
-                        <div className="w-2 h-2 rounded-full bg-white" />
+                  {/* Selection glow effect */}
+                  {isSelected && (
+                    <motion.div
+                      layoutId="selectionGlow"
+                      className="absolute inset-0 bg-gradient-to-br from-green-500/10 to-emerald-500/5 pointer-events-none"
+                      initial={{ opacity: 0 }}
+                      animate={{ opacity: 1 }}
+                      transition={{ duration: 0.3 }}
+                    />
+                  )}
+
+                  <div className="relative flex items-center gap-4">
+                    {/* Custom radio circle */}
+                    <div className="relative flex-shrink-0">
+                      <div
+                        className={`w-6 h-6 rounded-full border-2 flex items-center justify-center transition-all duration-300 ${
+                          isSelected
+                            ? "border-green-400 bg-green-400 scale-110"
+                            : "border-white/30 group-hover:border-white/50"
+                        }`}
+                      >
+                        {isSelected && (
+                          <motion.div
+                            initial={{ scale: 0 }}
+                            animate={{ scale: 1 }}
+                            transition={{ type: "spring", stiffness: 400, damping: 15 }}
+                            className="w-2.5 h-2.5 rounded-full bg-white"
+                          />
+                        )}
+                      </div>
+                      {/* Ripple on select */}
+                      {isSelected && (
+                        <motion.div
+                          initial={{ scale: 0.5, opacity: 0.5 }}
+                          animate={{ scale: 2.5, opacity: 0 }}
+                          transition={{ duration: 0.6, ease: "easeOut" }}
+                          className="absolute inset-0 rounded-full bg-green-400/30"
+                        />
                       )}
                     </div>
-                    <span className="text-sm md:text-base font-medium">{option}</span>
+
+                    <span className="text-sm md:text-base font-medium leading-snug">
+                      {option}
+                    </span>
                   </div>
                 </motion.button>
-              ))}
+              );
+            })}
 
-              {/* Other option */}
-              <motion.button
-                initial={{ opacity: 0, y: 10 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ delay: 0.05 * (question.options?.length || 0) }}
-                onClick={() => {
-                  setShowCustom(true);
-                  onChange(customText || "");
-                }}
-                className={`group relative p-4 rounded-xl border text-left transition-all duration-200 ${
-                  showCustom
-                    ? "border-green-400 bg-green-500/10 text-white shadow-lg shadow-green-500/10"
-                    : "border-white/10 bg-white/5 text-white/70 hover:border-white/20 hover:bg-white/10"
-                }`}
-              >
-                <div className="flex items-center gap-3">
-                  <div
-                    className={`w-5 h-5 rounded-full border-2 flex items-center justify-center transition-all duration-200 ${
-                      showCustom
-                        ? "border-green-400 bg-green-400"
-                        : "border-white/30 group-hover:border-white/50"
-                    }`}
-                  >
-                    {showCustom && <div className="w-2 h-2 rounded-full bg-white" />}
-                  </div>
-                  <span className="text-sm md:text-base font-medium">Other (please specify)</span>
-                </div>
-              </motion.button>
-            </div>
-
-            {/* Custom text input */}
+            {/* Custom text input for "Other" */}
             {showCustom && (
               <motion.div
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: "auto" }}
-                className="overflow-hidden"
+                exit={{ opacity: 0, height: 0 }}
+                transition={{ duration: 0.3, ease: "easeInOut" }}
+                className="md:col-span-2 overflow-hidden"
               >
-                <input
-                  type="text"
-                  value={customText}
-                  onChange={(e) => handleCustomTextChange(e.target.value)}
-                  placeholder="Type your answer..."
-                  autoFocus
-                  className="w-full px-4 py-3.5 rounded-xl bg-white/5 border border-green-400/30 text-white placeholder-white/30 backdrop-blur-sm focus:outline-none focus:border-green-400 focus:ring-1 focus:ring-green-400/30 transition-all duration-200"
-                />
+                <div className="pt-2">
+                  <motion.input
+                    initial={{ y: -10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    transition={{ delay: 0.1 }}
+                    type="text"
+                    value={customText}
+                    onChange={(e) => handleCustomTextChange(e.target.value)}
+                    placeholder="Type your answer here..."
+                    autoFocus
+                    className="w-full px-5 py-4 rounded-2xl bg-white/5 border-2 border-green-400/30 text-white placeholder-white/25 backdrop-blur-sm focus:outline-none focus:border-green-400 focus:ring-2 focus:ring-green-400/20 transition-all duration-300 text-lg"
+                  />
+                </div>
               </motion.div>
             )}
-          </div>
+          </motion.div>
         );
+      }
 
       default:
         return null;
@@ -181,43 +215,55 @@ export function QuestionCard({ question, value, onChange, index }: QuestionCardP
   return (
     <motion.div
       key={question.id}
-      initial={{ opacity: 0, x: 60 }}
+      initial={{ opacity: 0, x: 40 }}
       animate={{ opacity: 1, x: 0 }}
-      exit={{ opacity: 0, x: -60 }}
+      exit={{ opacity: 0, x: -40 }}
       transition={{ duration: 0.4, ease: "easeOut" }}
       className="w-full max-w-2xl mx-auto space-y-6"
     >
       {/* Question number badge */}
-      <div className="flex justify-center">
-        <motion.span
-          initial={{ scale: 0 }}
-          animate={{ scale: 1 }}
-          className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 text-sm font-medium text-white/70"
+      <motion.div
+        initial={{ scale: 0 }}
+        animate={{ scale: 1 }}
+        transition={{ type: "spring", stiffness: 300, damping: 15 }}
+        className="flex items-center justify-center gap-3"
+      >
+        {/* Icon */}
+        <div
+          className={`w-12 h-12 rounded-2xl bg-gradient-to-br ${iconColors[index % iconColors.length]} flex items-center justify-center shadow-lg shadow-green-500/15`}
         >
+          {questionIcons[index + 1]}
+        </div>
+        <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/10 backdrop-blur-sm border border-white/10 text-sm font-medium text-white/70">
           <span className="w-2 h-2 rounded-full bg-green-400 animate-pulse" />
           Question {index + 1} of 16
-        </motion.span>
-      </div>
+        </span>
+      </motion.div>
 
       {/* Question text */}
       <motion.h2
-        initial={{ opacity: 0, y: 20 }}
+        initial={{ opacity: 0, y: 15 }}
         animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.1 }}
-        className="text-xl md:text-2xl font-bold text-white text-center leading-relaxed"
+        transition={{ delay: 0.1, duration: 0.4 }}
+        className="text-xl md:text-2xl font-bold text-white text-center leading-relaxed px-4"
       >
         {question.text}
       </motion.h2>
 
       {/* Optional indicator */}
       {!question.required && (
-        <p className="text-center text-white/30 text-sm italic">
+        <motion.p
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.2 }}
+          className="text-center text-white/30 text-sm italic"
+        >
           (Optional — you can skip this one if you&apos;d like)
-        </p>
+        </motion.p>
       )}
 
       {/* Input */}
-      <div className="pt-4">{renderInput()}</div>
+      <div className="pt-2">{renderInput()}</div>
     </motion.div>
   );
 }

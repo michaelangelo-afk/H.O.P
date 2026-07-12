@@ -54,6 +54,25 @@ export function QuestionnaireContainer({ personalInfo }: QuestionnaireContainerP
   const handleSubmit = useCallback(async () => {
     setStage("submitting");
 
+    // Safety timeout — if nothing happens in 8 seconds, go to fallback
+    const timeoutId = setTimeout(() => {
+      goToFallback();
+    }, 8000);
+
+    const goToFallback = async () => {
+      clearTimeout(timeoutId);
+      try {
+        // Safe encoding that handles special characters
+        const safeStr = encodeURIComponent(
+          JSON.stringify({ personalInfo, answers })
+        );
+        router.push(`/thank-you?local=${safeStr}`);
+      } catch {
+        // Last resort: navigate to thank-you with no data
+        router.push("/thank-you");
+      }
+    };
+
     try {
       const supabase = getSupabase();
       const { data, error } = await supabase
@@ -65,18 +84,19 @@ export function QuestionnaireContainer({ personalInfo }: QuestionnaireContainerP
         .select("id")
         .single();
 
+      clearTimeout(timeoutId);
+
       if (error) throw error;
 
       if (data?.id) {
         router.push(`/thank-you?id=${data.id}`);
+      } else {
+        goToFallback();
       }
     } catch (err) {
       console.error("Failed to save:", err);
-      // Fallback: encode in URL
-      const encoded = btoa(
-        JSON.stringify({ personalInfo, answers })
-      );
-      router.push(`/thank-you?local=${encoded}`);
+      clearTimeout(timeoutId);
+      goToFallback();
     }
   }, [personalInfo, answers, router]);
 
