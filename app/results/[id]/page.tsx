@@ -6,7 +6,6 @@ import type { PersonalityResult, TraitScore } from "@/lib/types";
 
 interface ResultsPageProps {
   params: { id: string };
-  searchParams: { local?: string };
 }
 
 async function getResult(id: string) {
