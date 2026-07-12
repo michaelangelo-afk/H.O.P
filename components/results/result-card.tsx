@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { PersonalityResult } from "@/lib/types";
+import { TYPE_GRADIENTS, TYPE_EMOJIS } from "@/lib/personality-data";
 import { TraitChart } from "./trait-chart";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -10,47 +11,9 @@ interface ResultCardProps {
   result: PersonalityResult;
 }
 
-const typeGradients: Record<string, string> = {
-  INFJ: "from-purple-600 to-indigo-600",
-  INFP: "from-emerald-500 to-teal-600",
-  INTJ: "from-blue-600 to-indigo-800",
-  INTP: "from-cyan-600 to-blue-700",
-  ENFJ: "from-amber-500 to-orange-600",
-  ENFP: "from-yellow-500 to-red-500",
-  ENTJ: "from-red-600 to-rose-700",
-  ENTP: "from-orange-500 to-pink-600",
-  ISTJ: "from-slate-700 to-gray-900",
-  ISFJ: "from-green-600 to-emerald-800",
-  ISTP: "from-stone-600 to-zinc-800",
-  ISFP: "from-teal-500 to-cyan-700",
-  ESTJ: "from-blue-700 to-indigo-900",
-  ESFJ: "from-rose-500 to-pink-700",
-  ESTP: "from-amber-600 to-orange-800",
-  ESFP: "from-fuchsia-500 to-purple-800",
-};
-
-const typeEmojis: Record<string, string> = {
-  INFJ: "🦋",
-  INFP: "🌙",
-  INTJ: "🧠",
-  INTP: "🔬",
-  ENFJ: "🌟",
-  ENFP: "🎨",
-  ENTJ: "⚡",
-  ENTP: "💡",
-  ISTJ: "🏛️",
-  ISFJ: "🌻",
-  ISTP: "🔧",
-  ISFP: "🎵",
-  ESTJ: "📊",
-  ESFJ: "🤝",
-  ESTP: "🔥",
-  ESFP: "🎭",
-};
-
 export function ResultCard({ result }: ResultCardProps) {
-  const gradient = typeGradients[result.type] || "from-primary-600 to-accent-600";
-  const emoji = typeEmojis[result.type] || "✨";
+  const gradient = TYPE_GRADIENTS[result.type] || "from-primary-600 to-accent-600";
+  const emoji = TYPE_EMOJIS[result.type] || "✨";
 
   return (
     <motion.div
