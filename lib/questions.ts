@@ -36,7 +36,7 @@ export const questions: Question[] = [
     text: "What is your greatest regret?",
     type: "textarea",
     placeholder: "Share honestly... no one will judge you here",
-    required: false,
+    required: true,
   },
   {
     id: 4,
@@ -69,7 +69,7 @@ export const questions: Question[] = [
     text: "What is your greatest fear?",
     type: "textarea",
     placeholder: "Share what's on your heart...",
-    required: false,
+    required: true,
   },
   {
     id: 7,

@@ -234,18 +234,6 @@ export function QuestionCard({ question, value, onChange, index }: QuestionCardP
         {question.text}
       </motion.h2>
 
-      {/* Optional indicator */}
-      {!question.required && (
-        <motion.p
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2 }}
-          className="text-center text-white/30 text-sm italic"
-        >
-          (Optional — you can skip this one if you&apos;d like)
-        </motion.p>
-      )}
-
       {/* Input */}
       <div className="pt-2">{renderInput()}</div>
     </motion.div>
