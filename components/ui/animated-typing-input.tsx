@@ -102,7 +102,7 @@ export function AnimatedTypingInput({
   const inputClasses = `
     ${textStyles}
     ${isTextarea ? "resize-none" : ""}
-    text-transparent caret-green-400
+    text-transparent caret-transparent
     bg-white/[0.04] backdrop-blur-sm
     border-2 border-white/[0.08]
     focus:outline-none focus:border-green-400/30
@@ -210,7 +210,7 @@ export function AnimatedTypingInput({
       {/* Animated text overlay */}
       <div
         ref={overlayRef}
-        className={`${textStyles} absolute inset-0 z-20 pointer-events-none overflow-hidden ${
+        className={`${textStyles} ${className} absolute inset-0 z-20 pointer-events-none overflow-hidden ${
           isTextarea ? "overflow-y-auto" : "overflow-hidden"
         }`}
         aria-hidden="true"
