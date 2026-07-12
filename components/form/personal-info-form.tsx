@@ -233,7 +233,7 @@ export function PersonalInfoForm({ onSubmit }: PersonalInfoFormProps) {
               </svg>
             </Button>
           </motion.div>
-        </motion.form>
+        </form>
       </div>
     </motion.div>
   );
