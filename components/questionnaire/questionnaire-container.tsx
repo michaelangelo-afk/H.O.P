@@ -4,7 +4,7 @@ import { useState, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRouter } from "next/navigation";
 import { questions } from "@/lib/questions";
-import { supabase } from "@/lib/supabase";
+import { getSupabase } from "@/lib/supabase";
 import { QuestionCard } from "./question-card";
 import { ProgressBar } from "@/components/ui/progress-bar";
 import { Button } from "@/components/ui/button";
@@ -55,6 +55,7 @@ export function QuestionnaireContainer({ personalInfo }: QuestionnaireContainerP
     setStage("submitting");
 
     try {
+      const supabase = getSupabase();
       const { data, error } = await supabase
         .from("questionnaire_responses")
         .insert({
