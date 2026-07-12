@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { PersonalInfo, NIGERIA_STATES } from "@/lib/types";
 import { Button } from "@/components/ui/button";
+import { AnimatedInput } from "@/components/ui/animated-input";
 
 interface PersonalInfoFormProps {
   onSubmit: (info: PersonalInfo) => void;
@@ -127,7 +128,7 @@ export function PersonalInfoForm({ onSubmit }: PersonalInfoFormProps) {
                 <option key={state} value={state} className="bg-gray-900">{state}</option>
               ))}
             </select>
-          ) : (
+          ) : type === "number" || type === "date" ? (
             <input
               type={type}
               value={value}
@@ -140,6 +141,16 @@ export function PersonalInfoForm({ onSubmit }: PersonalInfoFormProps) {
               } text-white placeholder-white/25 backdrop-blur-sm focus:outline-none focus:border-green-400/50 focus:ring-2 focus:ring-green-400/20 transition-all duration-300`}
               style={type === "date" ? { colorScheme: "dark" } : undefined}
             />
+          ) : (
+            <div className="relative">
+              <AnimatedInput
+                type={type}
+                value={value}
+                onChange={(e) => handleChange(field, (e.target as HTMLInputElement).value)}
+                placeholder={placeholder}
+                className="pl-12"
+              />
+            </div>
           )}
         </div>
         {errors[field] && (

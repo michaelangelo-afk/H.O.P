@@ -4,6 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Question } from "@/lib/types";
 import { questionIcons } from "@/lib/question-icons";
+import { AnimatedInput } from "@/components/ui/animated-input";
 
 interface QuestionCardProps {
   question: Question;
@@ -54,36 +55,23 @@ export function QuestionCard({ question, value, onChange, index }: QuestionCardP
     switch (question.type) {
       case "text":
         return (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-          >
-            <input
-              type="text"
-              value={value}
-              onChange={(e) => onChange(e.target.value)}
-              placeholder={question.placeholder || "Type your answer..."}
-              className="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/25 backdrop-blur-sm focus:outline-none focus:border-green-400/50 focus:ring-2 focus:ring-green-400/20 transition-all duration-300 text-lg"
-            />
-          </motion.div>
+          <AnimatedInput
+            type="text"
+            value={value}
+            onChange={(e) => onChange((e.target as HTMLInputElement).value)}
+            placeholder={question.placeholder || "Type your answer..."}
+          />
         );
 
       case "textarea":
         return (
-          <motion.div
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15 }}
-          >
-            <textarea
-              value={value}
-              onChange={(e) => onChange(e.target.value)}
-              placeholder={question.placeholder || "Share your thoughts..."}
-              rows={4}
-              className="w-full px-5 py-4 rounded-2xl bg-white/5 border border-white/10 text-white placeholder-white/25 backdrop-blur-sm focus:outline-none focus:border-green-400/50 focus:ring-2 focus:ring-green-400/20 transition-all duration-300 resize-none text-lg"
-            />
-          </motion.div>
+          <AnimatedInput
+            isTextarea
+            value={value}
+            onChange={(e) => onChange((e.target as HTMLTextAreaElement).value)}
+            placeholder={question.placeholder || "Share your thoughts..."}
+            rows={4}
+          />
         );
 
       case "radio":
