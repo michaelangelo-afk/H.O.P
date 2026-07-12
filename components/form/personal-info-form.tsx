@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { PersonalInfo, NIGERIA_STATES } from "@/lib/types";
 import { Button } from "@/components/ui/button";
-import { AnimatedInput } from "@/components/ui/animated-input";
+import { AnimatedTypingInput } from "@/components/ui/animated-typing-input";
 
 interface PersonalInfoFormProps {
   onSubmit: (info: PersonalInfo) => void;
@@ -143,7 +143,7 @@ export function PersonalInfoForm({ onSubmit }: PersonalInfoFormProps) {
             />
           ) : (
             <div className="relative">
-              <AnimatedInput
+              <AnimatedTypingInput
                 type={type}
                 value={value}
                 onChange={(e) => handleChange(field, (e.target as HTMLInputElement).value)}

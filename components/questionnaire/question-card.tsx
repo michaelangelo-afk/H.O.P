@@ -4,7 +4,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Question } from "@/lib/types";
 import { questionIcons } from "@/lib/question-icons";
-import { AnimatedInput } from "@/components/ui/animated-input";
+import { AnimatedTypingInput } from "@/components/ui/animated-typing-input";
 
 interface QuestionCardProps {
   question: Question;
@@ -55,7 +55,7 @@ export function QuestionCard({ question, value, onChange, index }: QuestionCardP
     switch (question.type) {
       case "text":
         return (
-          <AnimatedInput
+          <AnimatedTypingInput
             type="text"
             value={value}
             onChange={(e) => onChange((e.target as HTMLInputElement).value)}
@@ -65,7 +65,7 @@ export function QuestionCard({ question, value, onChange, index }: QuestionCardP
 
       case "textarea":
         return (
-          <AnimatedInput
+          <AnimatedTypingInput
             isTextarea
             value={value}
             onChange={(e) => onChange((e.target as HTMLTextAreaElement).value)}
@@ -177,16 +177,12 @@ export function QuestionCard({ question, value, onChange, index }: QuestionCardP
                 className="md:col-span-2 overflow-hidden"
               >
                 <div className="pt-2">
-                  <motion.input
-                    initial={{ y: -10, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.1 }}
+                  <AnimatedTypingInput
                     type="text"
                     value={customText}
-                    onChange={(e) => handleCustomTextChange(e.target.value)}
+                    onChange={(e) => handleCustomTextChange((e.target as HTMLInputElement).value)}
                     placeholder="Type your answer here..."
                     autoFocus
-                    className="w-full px-5 py-4 rounded-2xl bg-white/5 border-2 border-green-400/30 text-white placeholder-white/25 backdrop-blur-sm focus:outline-none focus:border-green-400 focus:ring-2 focus:ring-green-400/20 transition-all duration-300 text-lg"
                   />
                 </div>
               </motion.div>
